@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abhishek Salunke</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #000000;
+      --yellow: #FFD60A;
+      --dim:    #999;
+      --dimmer: #444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ── HEADER ── */
+    .name {
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.1rem;
+    }
+    .location {
+      color: var(--dim);
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── BIO ── */
+    .bio {
+      font-weight: 300;
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--yellow);
+      margin-bottom: 3rem;
+    }
+    .bio em {
+      font-style: italic;
+    }
+
+    /* ── DIVIDER ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--dimmer);
+      margin: 2.5rem 0;
+    }
+
+    /* ── LABELS ── */
+    .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── APOD ── */
+    .apod-wrap { margin-bottom: 0.5rem; }
+    .apod-img-wrap {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--dimmer);
+      overflow: hidden;
+      margin-bottom: 0.9rem;
+      position: relative;
+    }
+    .apod-img-wrap img,
+    .apod-img-wrap iframe {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border: none;
+      display: block;
+    }
+    .apod-loading {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+    .apod-title-text {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--yellow);
+      margin-bottom: 0.3rem;
+    }
+    .apod-date-text {
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin-bottom: 0.6rem;
+    }
+    .apod-desc-text {
+      font-size: 0.78rem;
+      color: var(--dim);
+      line-height: 1.75;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .apod-credit {
+      font-size: 0.7rem;
+      color: var(--dimmer);
+      margin-top: 0.5rem;
+    }
+
+    /* ── WHERE I WORK ── */
+    .work-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.55rem 0;
+      font-size: 0.85rem;
+    }
+    .work-row:first-of-type { border-top: 1px solid var(--dimmer); }
+    .work-role { color: var(--yellow); }
+    .work-meta {
+      font-size: 0.75rem;
+      color: var(--dim);
+      text-align: right;
+    }
+
+    /* ── SOCIALS ── */
+    .socials {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .social-link {
+      font-size: 0.85rem;
+      color: var(--yellow);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.3rem 0;
+      transition: color 0.15s;
+    }
+    .social-link:hover { color: #fff; }
+    .social-link .handle { color: var(--dim); font-size: 0.75rem; }
+
+    /* ── FOOTER META ── */
+    .footer-meta {
+      font-size: 0.72rem;
+      color: var(--dim);
+      line-height: 2;
+    }
+    .footer-meta a {
+      color: var(--dim);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .footer-meta a:hover { color: var(--yellow); }
+    #visitor-location { color: var(--yellow); }
+
+    /* ── LIVE DOT ── */
+    .live {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      color: var(--dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--yellow);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.15; }
+    }
+    /* ── GAME LAUNCHER ── */
+    .game-launch-btn {
+      background: none;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 0.6rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .game-launch-btn:hover { background: var(--yellow); color: #000; }
+
+    /* ── MODAL ── */
+    .game-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .game-modal-box {
+      background: #0A0A0A;
+      border: 1px solid var(--dimmer);
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .game-modal-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.5rem;
+    }
+    .game-option {
+      background: none;
+      border: 1px solid var(--dimmer);
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1rem;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .game-option:hover { border-color: var(--yellow); background: #111; }
+    .game-option-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--yellow);
+    }
+    .game-option-desc {
+      font-size: 0.72rem;
+      color: var(--dim);
+    }
+    .game-modal-close {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      cursor: pointer;
+      text-align: left;
+      padding: 0.25rem 0;
+      letter-spacing: 0.08em;
+      transition: color 0.15s;
+    }
+    .game-modal-close:hover { color: var(--yellow); }
+    /* ── FULLSCREEN OVERLAY ── */
+    .game-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+    .game-overlay-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid var(--dimmer);
+      flex-shrink: 0;
+    }
+    .game-overlay-title {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .game-overlay-close {
+      background: none;
+      border: 1px solid var(--dimmer);
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.75rem;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: border-color 0.15s;
+    }
+    .game-overlay-close:hover { border-color: var(--yellow); }
+    .game-overlay-body {
+      flex: 1;
+      overflow: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    /* ── SORT IN OVERLAY ── */
+    .ov-race { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+    .ov-lane { display: flex; flex-direction: column; gap: 0.35rem; }
+    .ov-lane-label { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+    .ov-canvas { display: block; width: 100%; height: 160px; border: 1px solid var(--dimmer); }
+    .ov-nums { font-size: 0.58rem; color: var(--dim); word-break: break-all; line-height: 1.5; min-height: 1rem; }
+    .ov-stat { font-size: 0.65rem; color: var(--dim); }
+    .ov-stat span { color: var(--yellow); }
+    .ov-podium { display: none; margin-top: 1rem; }
+    .ov-podium-wrap { display: flex; align-items: flex-end; justify-content: center; gap: 0.5rem; height: 100px; }
+    .ov-podium-slot { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .ov-podium-name { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow); }
+    .ov-block { display: flex; align-items: center; justify-content: center; width: 80px; font-size: 1rem; font-weight: 500; }
+    .ov-p1 { height: 75px; background: var(--yellow); color: #000; }
+    .ov-p2 { height: 52px; background: #AA8800; color: #000; }
+    .ov-p3 { height: 36px; background: #444; color: var(--yellow); }
+    /* ── GRAVITY IN OVERLAY ── */
+    #ov-grav-canvas { display: block; width: 100%; border: 1px solid var(--dimmer); cursor: crosshair; }
+    .ov-grav-controls { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+    .ov-hint { font-size: 0.65rem; color: var(--dimmer); margin-top: 0.4rem; }
+    .ov-gstat { font-size: 0.68rem; color: var(--dim); margin-left: auto; }
+    .ov-gstat span { color: var(--yellow); }
+    .ov-btn {
+      background: none; border: 1px solid var(--dimmer); color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      padding: 0.28rem 0.7rem; cursor: pointer; letter-spacing: 0.06em;
+      transition: border-color 0.15s;
+    }
+    .ov-btn:hover { border-color: var(--yellow); }
+    .ov-btn:disabled { opacity: 0.3; cursor: default; }
+    .ov-controls { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <p class="name">Abhishek Salunke</p>
+  <p class="location">Ottawa, Canada</p>
+
+  <!-- BIO -->
+  <p class="bio">
+    Senior Data Engineer at CMHC, building pipelines that move national housing data at scale — Databricks, PySpark, Delta Lake, Azure.<br /><br />
+    Outside of work I like to photograph things worth remembering, dive deep into science, watch films that linger, and write long-form essays about the things I can't stop thinking about.
+  </p>
+
+  <hr />
+
+  <!-- APOD -->
+  <p class="label">NASA · Astronomy picture of the day</p>
+  <div class="live"><span class="live-dot"></span> Updates daily</div>
+  <div class="apod-wrap">
+    <div class="apod-img-wrap" id="apod-media">
+      <div class="apod-loading">fetching from nasa…</div>
+    </div>
+    <p class="apod-title-text" id="apod-title"></p>
+    <p class="apod-date-text" id="apod-date"></p>
+    <p class="apod-desc-text" id="apod-desc"></p>
+    <p class="apod-credit" id="apod-credit"></p>
+  </div>
+
+  <hr />
+
+  <!-- WHERE I WORK -->
+  <p class="label">Where I work</p>
+  <div class="work-row">
+    <span class="work-role">Senior Data Engineer</span>
+    <span class="work-meta">CMHC · 2023 – Present</span>
+  </div>
+  <div class="work-row">
+    <span class="work-role">BI Specialist</span>
+    <span class="work-meta">Sherweb · 2021 – 2023</span>
+  </div>
+  <div class="work-row">
+    <span class="work-role">BI Analyst Intern</span>
+    <span class="work-meta">Nokia · 2020 – 2021</span>
+  </div>
+
+  <hr />
+
+  <!-- SOCIALS -->
+  <p class="label">Find me</p>
+  <div class="socials">
+    <a href="https://linkedin.com/in/abhisheksalunke12" target="_blank" class="social-link">LinkedIn</a>
+    <a href="https://github.com/abhisalunke16-sketch" target="_blank" class="social-link">GitHub</a>
+    <a href="https://medium.com/@abhisheksalunke" target="_blank" class="social-link">Medium</a>
+    <a href="https://instagram.com/madebyabhii" target="_blank" class="social-link">Instagram</a>
+  </div>
+
+  <hr />
+
+  <!-- GAME LAUNCHER -->
+  <button class="game-launch-btn" id="game-launch">Want to play?</button>
+
+  <!-- PICKER MODAL -->
+  <div id="game-modal" class="game-modal" style="display:none;">
+    <div class="game-modal-box">
+      <p class="game-modal-title">Pick a game</p>
+      <button class="game-option" id="pick-sort">
+        <span class="game-option-name">Sorting race</span>
+        <span class="game-option-desc">Three algorithms race to sort the same data.</span>
+      </button>
+      <button class="game-option" id="pick-gravity">
+        <span class="game-option-name">Gravity simulator</span>
+        <span class="game-option-desc">Spawn particles. Watch them attract and orbit.</span>
+      </button>
+      <button class="game-modal-close" id="game-close">Cancel</button>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN GAME OVERLAY -->
+  <div id="game-overlay" class="game-overlay" style="display:none;">
+    <div class="game-overlay-bar">
+      <span class="game-overlay-title" id="overlay-title"></span>
+      <button class="game-overlay-close" id="overlay-close">✕ Close</button>
+    </div>
+    <div class="game-overlay-body" id="overlay-body"></div>
+  </div>
+
+  <hr />
+  <div class="footer-meta">
+    <p>Built by Abhishek Salunke · Ottawa, 2026</p>
+    <p>Current visitor from <span id="visitor-location">—</span></p>
+  </div>
+
+  <script>
+    // ── NASA APOD ──
+    async function loadAPOD() {
+      const API_KEY = 'KSNbbjJ8YBNnrLR2OIlTneYcg12qv7s9dZQWyraj';
+      const mediaEl = document.getElementById('apod-media');
+      const titleEl = document.getElementById('apod-title');
+      const dateEl  = document.getElementById('apod-date');
+      const descEl  = document.getElementById('apod-desc');
+      const credEl  = document.getElementById('apod-credit');
+      try {
+        const res  = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`);
+        const data = await res.json();
+        const d = new Date(data.date + 'T12:00:00');
+        titleEl.textContent = data.title;
+        dateEl.textContent  = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        descEl.textContent  = data.explanation;
+        if (data.copyright) credEl.textContent = 'Image: ' + data.copyright.replace(/\n/g, ' ');
+        if (data.media_type === 'image') {
+          mediaEl.innerHTML = `<img src="${data.hdurl || data.url}" alt="${data.title}" loading="lazy" />`;
+        } else if (data.media_type === 'video') {
+          mediaEl.innerHTML = `<iframe src="${data.url}" title="${data.title}" allowfullscreen></iframe>`;
+        } else {
+          mediaEl.innerHTML = '';
+        }
+      } catch {
+        mediaEl.innerHTML = '';
+        mediaEl.style.display = 'none';
+        descEl.textContent = 'Add your NASA API key to load today\'s image.';
+      }
+    }
+    loadAPOD();
+
+    // ── VISITOR LOCATION ──
+    async function loadVisitor() {
+      try {
+        const res  = await fetch('https://ipwho.is/');
+        const data = await res.json();
+        const loc  = [data.city, data.country].filter(Boolean).join(', ');
+        document.getElementById('visitor-location').textContent = loc || '—';
+      } catch {
+        document.getElementById('visitor-location').textContent = '—';
+      }
+    }
+    loadVisitor();
+
+    // ── GAME LAUNCHER ──
+    const modal   = document.getElementById('game-modal');
+    const overlay = document.getElementById('game-overlay');
+    const body    = document.getElementById('overlay-body');
+    const titleEl = document.getElementById('overlay-title');
+    let gravAnimId = null, sortTimers = [];
+
+    document.getElementById('game-launch').addEventListener('click', () => {
+      modal.style.display = 'flex';
+    });
+    document.getElementById('game-close').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', e => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+    document.getElementById('overlay-close').addEventListener('click', closeOverlay);
+
+    function closeOverlay() {
+      overlay.style.display = 'none';
+      if (gravAnimId) { cancelAnimationFrame(gravAnimId); gravAnimId = null; }
+      sortTimers.forEach(clearTimeout); sortTimers = [];
+      body.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    function openOverlay(title, buildFn) {
+      modal.style.display = 'none';
+      body.innerHTML = '';
+      titleEl.textContent = title;
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      buildFn(body);
+    }
+
+    // ── SORTING RACE ──
+    document.getElementById('pick-sort').addEventListener('click', () => {
+      openOverlay('Sorting race', function(container) {
+        container.innerHTML = `
+          <p style="font-size:0.75rem;color:var(--dim);line-height:1.8;margin-bottom:0.75rem;">Three algorithms. Same shuffled data. Who finishes first?</p>
+          <div class="ov-controls">
+            <button class="ov-btn" id="ov-start">Start race</button>
+            <button class="ov-btn" id="ov-reset">Reset</button>
+          </div>
+          <div class="ov-race">
+            <div class="ov-lane">
+              <p class="ov-lane-label">Bubble sort</p>
+              <canvas class="ov-canvas" id="ov-cb" width="300" height="160"></canvas>
+              <p class="ov-nums" id="ov-nb"></p>
+              <p class="ov-stat">Swaps: <span id="ov-sb">0</span></p>
+            </div>
+            <div class="ov-lane">
+              <p class="ov-lane-label">Merge sort</p>
+              <canvas class="ov-canvas" id="ov-cm" width="300" height="160"></canvas>
+              <p class="ov-nums" id="ov-nm"></p>
+              <p class="ov-stat">Merges: <span id="ov-sm">0</span></p>
+            </div>
+            <div class="ov-lane">
+              <p class="ov-lane-label">Quicksort</p>
+              <canvas class="ov-canvas" id="ov-cq" width="300" height="160"></canvas>
+              <p class="ov-nums" id="ov-nq"></p>
+              <p class="ov-stat">Pivots: <span id="ov-sq">0</span></p>
+            </div>
+          </div>
+          <div class="ov-podium" id="ov-pod">
+            <div class="ov-podium-wrap">
+              <div class="ov-podium-slot"><div class="ov-podium-name" id="ov-pn2"></div><div class="ov-block ov-p2">2</div></div>
+              <div class="ov-podium-slot"><div class="ov-podium-name" id="ov-pn1"></div><div class="ov-block ov-p1">1</div></div>
+              <div class="ov-podium-slot"><div class="ov-podium-name" id="ov-pn3"></div><div class="ov-block ov-p3">3</div></div>
+            </div>
+          </div>`;
+
+        const DL=40, DIM='#333', ACT='#FF8C00', DN='#FFD60A';
+        let base=[], running=false, fin=[];
+
+        function rnd(){const a=[...Array(20)].map((_,i)=>i+1);for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+        function bars(id,arr,hi=[],done=false){
+          const c=document.getElementById(id);if(!c)return;
+          const ctx=c.getContext('2d'),W=c.width,H=c.height,mx=Math.max(...arr),bw=W/arr.length;
+          ctx.clearRect(0,0,W,H);ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+          arr.forEach((v,i)=>{ctx.fillStyle=done?DN:hi.includes(i)?ACT:DIM;const h=Math.max(2,(v/mx)*(H-4));ctx.fillRect(i*bw+1,H-h,bw-2,h);});
+        }
+
+        function sn(id,arr){const el=document.getElementById(id);if(el)el.textContent=arr.join(' · ');}
+        function sv(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+
+        function rf(name){
+          fin.push(name);
+          if(fin.length===3){
+            sv('ov-pn1',fin[0]);sv('ov-pn2',fin[1]);sv('ov-pn3',fin[2]);
+            const pod=document.getElementById('ov-pod');if(pod)pod.style.display='block';
+            const btn=document.getElementById('ov-start');if(btn)btn.disabled=false;
+            running=false;
+          }
+        }
+
+        function bubble(arr){
+          const st=[],a=[...arr];let sw=0;
+          for(let i=0;i<a.length;i++)for(let j=0;j<a.length-i-1;j++){if(a[j]>a[j+1]){[a[j],a[j+1]]=[a[j+1],a[j]];sw++;}st.push({a:[...a],h:[j,j+1],sw});}
+          st.push({a:[...a],h:[],d:true,sw});
+          st.forEach((s,i)=>sortTimers.push(setTimeout(()=>{bars('ov-cb',s.a,s.h,s.d);sn('ov-nb',s.a);sv('ov-sb',s.sw);if(s.d)rf('Bubble');},i*DL)));
+        }
+
+        function merge(arr){
+          const st=[];let m=0;
+          function ms(a,l,r){if(r-l<=1)return;const mid=Math.floor((l+r)/2);ms(a,l,mid);ms(a,mid,r);const L=a.slice(l,mid),R=a.slice(mid,r);let i=0,j=0,k=l;while(i<L.length&&j<R.length)a[k++]=L[i]<=R[j]?L[i++]:R[j++];while(i<L.length)a[k++]=L[i++];while(j<R.length)a[k++]=R[j++];m++;st.push({a:[...a],h:[l,r-1],m});}
+          const a=[...arr];ms(a,0,a.length);st.push({a:[...a],h:[],d:true,m});
+          st.forEach((s,i)=>sortTimers.push(setTimeout(()=>{bars('ov-cm',s.a,s.h,s.d);sn('ov-nm',s.a);sv('ov-sm',s.m);if(s.d)rf('Merge');},i*DL)));
+        }
+
+        function quick(arr){
+          const st=[];let p=0;
+          function qs(a,lo,hi){if(lo>=hi)return;const pv=a[hi];let i=lo;for(let j=lo;j<hi;j++)if(a[j]<=pv){[a[i],a[j]]=[a[j],a[i]];i++;}[a[i],a[hi]]=[a[hi],a[i]];p++;st.push({a:[...a],h:[i],p});qs(a,lo,i-1);qs(a,i+1,hi);}
+          const a=[...arr];qs(a,0,a.length-1);st.push({a:[...a],h:[],d:true,p});
+          st.forEach((s,i)=>sortTimers.push(setTimeout(()=>{bars('ov-cq',s.a,s.h,s.d);sn('ov-nq',s.a);sv('ov-sq',s.p);if(s.d)rf('Quick');},i*DL)));
+        }
+
+        function reset(){
+          sortTimers.forEach(clearTimeout);sortTimers=[];running=false;fin=[];
+          const pod=document.getElementById('ov-pod');if(pod)pod.style.display='none';
+          ['ov-sb','ov-sm','ov-sq'].forEach(id=>sv(id,'0'));
+          ['ov-nb','ov-nm','ov-nq'].forEach(id=>sn(id,[]));
+          const btn=document.getElementById('ov-start');if(btn)btn.disabled=false;
+          base=rnd();
+          bars('ov-cb',[...base]);bars('ov-cm',[...base]);bars('ov-cq',[...base]);
+          sn('ov-nb',base);sn('ov-nm',base);sn('ov-nq',base);
+        }
+
+        document.getElementById('ov-start').addEventListener('click', function(){
+          if(running)return;running=true;fin=[];this.disabled=true;
+          const pod=document.getElementById('ov-pod');if(pod)pod.style.display='none';
+          bubble([...base]);merge([...base]);quick([...base]);
+        });
+        document.getElementById('ov-reset').addEventListener('click', reset);
+        reset();
+      });
+    });
+
+    // ── GRAVITY SIMULATOR ──
+    document.getElementById('pick-gravity').addEventListener('click', () => {
+      openOverlay('Gravity simulator', function(container) {
+        container.innerHTML = `
+          <p style="font-size:0.75rem;color:var(--dim);line-height:1.8;margin-bottom:0.75rem;">Click to spawn particles. They attract each other — the same physics that forms galaxies.</p>
+          <canvas id="ov-grav-canvas" width="900" height="460"></canvas>
+          <div class="ov-grav-controls">
+            <button class="ov-btn" id="ov-gclear">Clear</button>
+            <button class="ov-btn" id="ov-gburst">Burst</button>
+            <p class="ov-gstat">Particles: <span id="ov-gcnt">0</span></p>
+          </div>
+          <p class="ov-hint">Click to add · Burst spawns a ring · Particles attract via gravity</p>`;
+
+        const cv = document.getElementById('ov-grav-canvas');
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const G=0.4, MAX=150, DP=0.995, MD=8;
+        let pts = [];
+
+        function P(x,y,vx,vy){return{x,y,vx:vx||0,vy:vy||0,trail:[]};}
+        function cap(){if(pts.length>MAX)pts=pts.slice(-MAX);const el=document.getElementById('ov-gcnt');if(el)el.textContent=pts.length;}
+        function burst(cx,cy){for(let i=0;i<12;i++){const a=(i/12)*Math.PI*2,s=0.8+Math.random()*1.2;pts.push(P(cx+Math.cos(a)*20,cy+Math.sin(a)*20,Math.cos(a)*s,Math.sin(a)*s));}cap();}
+
+        function upd(){
+          for(let i=0;i<pts.length;i++){
+            const a=pts[i];let ax=0,ay=0;
+            for(let j=0;j<pts.length;j++){if(i===j)continue;const b=pts[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy);if(d<MD)continue;const f=G/(d*d);ax+=f*dx/d;ay+=f*dy/d;}
+            a.vx=(a.vx+ax)*DP;a.vy=(a.vy+ay)*DP;
+            a.trail.push({x:a.x,y:a.y});if(a.trail.length>18)a.trail.shift();
+            a.x+=a.vx;a.y+=a.vy;
+            if(a.x<0){a.x=0;a.vx*=-0.6;}if(a.x>W){a.x=W;a.vx*=-0.6;}
+            if(a.y<0){a.y=0;a.vy*=-0.6;}if(a.y>H){a.y=H;a.vy*=-0.6;}
+          }
+        }
+
+        function draw(){
+          ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+          pts.forEach(p=>{
+            p.trail.forEach((pt,i)=>{const al=i/p.trail.length;ctx.beginPath();ctx.arc(pt.x,pt.y,1,0,Math.PI*2);ctx.fillStyle='rgba(255,214,10,'+al*0.3+')';ctx.fill();});
+            const sp=Math.sqrt(p.vx*p.vx+p.vy*p.vy),gl=Math.min(1,sp/3);
+            ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);
+            ctx.fillStyle='rgb(255,'+Math.floor(214-gl*80)+','+Math.floor(gl*30)+')';ctx.fill();
+          });
+        }
+
+        function loop(){if(!document.getElementById('ov-grav-canvas')){cancelAnimationFrame(gravAnimId);return;}upd();draw();gravAnimId=requestAnimationFrame(loop);}
+
+        cv.addEventListener('click',e=>{
+          const r=cv.getBoundingClientRect(),sx=W/r.width,sy=H/r.height;
+          pts.push(P((e.clientX-r.left)*sx,(e.clientY-r.top)*sy,(Math.random()-0.5)*1.5,(Math.random()-0.5)*1.5));cap();
+        });
+        document.getElementById('ov-gclear').addEventListener('click',()=>{pts=[];const el=document.getElementById('ov-gcnt');if(el)el.textContent=0;});
+        document.getElementById('ov-gburst').addEventListener('click',()=>burst(W/2,H/2));
+
+        burst(W/2,H/2);
+        gravAnimId=requestAnimationFrame(loop);
+      });
+    });
+  </script>
+
+  </script>
+
+</body>
+</html>
