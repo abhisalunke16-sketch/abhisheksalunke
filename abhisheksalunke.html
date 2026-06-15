@@ -109,10 +109,7 @@
       font-size: 0.78rem;
       color: var(--dim);
       line-height: 1.75;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    }
     }
     .apod-credit {
       font-size: 0.7rem;
@@ -351,8 +348,8 @@
 
   <!-- BIO -->
   <p class="bio">
-    Senior Data Engineer at CMHC, building pipelines that move national housing data at scale — Databricks, PySpark, Delta Lake, Azure.<br /><br />
-    Outside of work I like to photograph things worth remembering, dive deep into science, watch films that linger, and write long-form essays about the things I can't stop thinking about.
+    I'm a Senior Data Engineer at CMHC, building pipelines that move national housing data at scale using Databricks, PySpark, Delta Lake, Azure.<br /><br />
+    Outside of work I like to photograph things worth remembering, watch films that linger, write long-form essays about the things I can't stop thinking about, and dive deep into science. Today's proof is right below.
   </p>
 
   <hr />
@@ -393,7 +390,7 @@
   <p class="label">Find me</p>
   <div class="socials">
     <a href="https://linkedin.com/in/abhisheksalunke12" target="_blank" class="social-link">LinkedIn</a>
-    <a href="https://github.com/abhisalunke16-sketch" target="_blank" class="social-link">GitHub</a>
+    <a href="https://github.com/abhisheksalunke" target="_blank" class="social-link">GitHub</a>
     <a href="https://medium.com/@abhisheksalunke" target="_blank" class="social-link">Medium</a>
     <a href="https://instagram.com/madebyabhii" target="_blank" class="social-link">Instagram</a>
   </div>
@@ -430,7 +427,7 @@
 
   <hr />
   <div class="footer-meta">
-    <p>Built by Abhishek Salunke · Ottawa, 2026</p>
+    <p>Built by Abhishek Salunke · Ottawa</p>
     <p>Current visitor from <span id="visitor-location">—</span></p>
   </div>
 
@@ -469,12 +466,19 @@
     // ── VISITOR LOCATION ──
     async function loadVisitor() {
       try {
-        const res  = await fetch('https://ipwho.is/');
+        const res  = await fetch('https://freeipapi.com/api/json');
         const data = await res.json();
-        const loc  = [data.city, data.country].filter(Boolean).join(', ');
+        const loc  = [data.cityName, data.countryName].filter(Boolean).join(', ');
         document.getElementById('visitor-location').textContent = loc || '—';
       } catch {
-        document.getElementById('visitor-location').textContent = '—';
+        try {
+          const res  = await fetch('https://ipapi.co/json/');
+          const data = await res.json();
+          const loc  = [data.city, data.country_name].filter(Boolean).join(', ');
+          document.getElementById('visitor-location').textContent = loc || '—';
+        } catch {
+          document.getElementById('visitor-location').textContent = '—';
+        }
       }
     }
     loadVisitor();
